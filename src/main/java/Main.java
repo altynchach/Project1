@@ -61,9 +61,9 @@ public class Main {
     }
 
     private double calculatePerPerson(int numberOfPeople) {
-        return totalSum / numberOfPeople; // Directly return the calculated value
+        return totalSum / numberOfPeople;
     }
-
+git
     private void printTotalPerPerson(double totalPerPerson) {
         System.out.println("Каждый должен заплатить по " + totalPerPerson + " " + rouble + ".");
     }
