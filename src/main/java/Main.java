@@ -6,6 +6,7 @@ public class Main {
     private int numberOfPeople;
     private double calculate;
     private String rouble;
+    private String productsList = "";
 
     public static void main(String[] args) {
         Main main = new Main();
@@ -20,40 +21,53 @@ public class Main {
         double totalPerPerson = calculatePerPerson(numberOfPeople);
         roubleFormat(totalPerPerson);
         printTotalPerPerson(totalPerPerson);
+        printProductsList();
         scanner.close();
     }
 
     private void addProduct() {
         String answer;
         do {
-            scanner.nextLine(); // очистка буфера
+            scanner.nextLine();
             System.out.print("Введите название товара: ");
             String product = scanner.nextLine();
+
             System.out.print("Введите стоимость товара: ");
             while (!scanner.hasNextDouble()) {
                 System.out.println("Введите числовое значение для стоимости.");
-                scanner.next(); // to clear the invalid input
-                System.out.print("Введите стоимость товара: ");
+                scanner.nextLine(); // очищаем буфер сканера
             }
-
             double price = scanner.nextDouble();
-            scanner.nextLine();
+            scanner.nextLine(); // очищаем буфер сканера после чтения числа
 
             totalSum += price;
-            System.out.println("Товар \"" + product + "\" стоимостью " + price + " руб. добавлен. Хотите добавить ещё товар? (да/нет)");
+            productsList += product + ", "; // Добавление названия товара в список
+            System.out.println("Товар \"" + product + "\" стоимостью " + price + " руб. добавлен.");
 
+            System.out.print("Хотите добавить ещё товар? (да/нет) ");
             answer = scanner.nextLine();
-            if (!answer.equalsIgnoreCase("да") && !answer.equalsIgnoreCase("нет")) {
+            while (!answer.equalsIgnoreCase("да") && !answer.equalsIgnoreCase("нет")) {
                 System.out.println("Ответ должен быть \"да\" или \"нет\".");
+                System.out.print("Хотите добавить ещё товар? (да/нет) ");
+                answer = scanner.nextLine();
             }
-        } while (!answer.equalsIgnoreCase("нет"));
+        } while (answer.equalsIgnoreCase("да"));
     }
 
+
+
+
+    private void printProductsList() {
+        if (!productsList.isEmpty()) {
+            productsList = productsList.substring(0, productsList.length() - 2);
+            System.out.println("Список товаров: " + productsList);
+        }
+    }
 
     private boolean checkNumberOfPeople() {
         System.out.print("На сколько человек нужно разделить счёт? ");
         while (!scanner.hasNextInt() || (numberOfPeople = scanner.nextInt()) <= 1) {
-            scanner.nextLine(); // очистка буфера
+            scanner.nextLine();
             System.out.println("Количество человек должно быть больше одного.");
             System.out.print("На сколько человек разделить счёт? ");
         }
