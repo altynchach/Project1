@@ -1,94 +1,132 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+    public static void main(String[] args) {
+        BillCalculator calculator = new BillCalculator();
+        calculator.run();
+    }
+}
+
+class BillCalculator {
     private double totalSum;
     private Scanner scanner;
     private int numberOfPeople;
-    private double calculate;
-    private String rouble;
-    private String productsList = "";
+    private List<Product> products;
 
-    public static void main(String[] args) {
-        Main main = new Main();
-        main.run();
+    public BillCalculator() {
+        scanner = new Scanner(System.in);
+        products = new ArrayList<>();
     }
 
     public void run() {
-        scanner = new Scanner(System.in);
         totalSum = 0.0;
         checkNumberOfPeople();
-        addProduct();
-        double totalPerPerson = calculatePerPerson(numberOfPeople);
-        roubleFormat(totalPerPerson);
-        printTotalPerPerson(totalPerPerson);
+        addProducts();
+        double totalPerPerson = calculatePerPerson();
+        String rouble = formatRoubles(totalPerPerson);
+        printTotalPerPerson(totalPerPerson, rouble);
         printProductsList();
         scanner.close();
     }
 
-    private void addProduct() {
+    private void addProducts() {
         String answer;
         do {
-            scanner.nextLine();
             System.out.print("Введите название товара: ");
-            String product = scanner.nextLine();
+            String productName = scanner.nextLine();
 
             System.out.print("Введите стоимость товара: ");
-            while (!scanner.hasNextDouble()) {
-                System.out.println("Введите числовое значение для стоимости.");
-                scanner.nextLine();
+            double price = 0;
+            boolean validPrice = false;
+            while (!validPrice) {
+                if (scanner.hasNextDouble()) {
+                    price = scanner.nextDouble();
+                    validPrice = true;
+                } else {
+                    System.out.println("Введите числовое значение для стоимости.");
+                    scanner.next();
+                }
             }
-            double price = scanner.nextDouble();
             scanner.nextLine();
 
+            Product product = new Product(productName, price);
+            products.add(product);
             totalSum += price;
-            productsList += product + ", ";
-            System.out.println("Товар \"" + product + "\" стоимостью " + price + " руб. добавлен.");
 
-            System.out.print("Хотите добавить ещё товар? (да/нет) ");
-            answer = scanner.nextLine();
-            while (!answer.equalsIgnoreCase("да") && !answer.equalsIgnoreCase("нет")) {
-                System.out.println("Ответ должен быть \"да\" или \"нет\".");
+            System.out.println("Товар \"" + productName + "\" стоимостью " + formatPrice(price) + " " + formatRoubles(price) + " добавлен.");
+            do {
                 System.out.print("Хотите добавить ещё товар? (да/нет) ");
                 answer = scanner.nextLine();
-            }
+                if (!answer.equalsIgnoreCase("да") && !answer.equalsIgnoreCase("нет")) {
+                    System.out.println("Ответ должен быть \"да\" или \"нет\".");
+                }
+            } while (!answer.equalsIgnoreCase("да") && !answer.equalsIgnoreCase("нет"));
         } while (answer.equalsIgnoreCase("да"));
     }
 
-
-
-
     private void printProductsList() {
-        if (!productsList.isEmpty()) {
-            productsList = productsList.substring(0, productsList.length() - 2);
-            System.out.println("Список товаров: " + productsList);
+        if (!products.isEmpty()) {
+            System.out.print("Список товаров: ");
+            for (int i = 0; i < products.size(); i++) {
+                System.out.print(products.get(i).getName());
+                if (i < products.size() - 1) {
+                    System.out.print(", ");
+                }
+            }
+            System.out.println();
         }
     }
 
     private boolean checkNumberOfPeople() {
         System.out.print("На сколько человек нужно разделить счёт? ");
         while (!scanner.hasNextInt() || (numberOfPeople = scanner.nextInt()) <= 1) {
-            scanner.nextLine();
             System.out.println("Количество человек должно быть больше одного.");
             System.out.print("На сколько человек разделить счёт? ");
+            scanner.nextLine();
         }
+        scanner.nextLine();
         return true;
     }
 
-    private double calculatePerPerson(int numberOfPeople) {
+    private double calculatePerPerson() {
         return totalSum / numberOfPeople;
     }
 
-    private void printTotalPerPerson(double totalPerPerson) {
-        System.out.println("Каждый должен заплатить по " + totalPerPerson + " " + rouble + ".");
+    private void printTotalPerPerson(double totalPerPerson, String rouble) {
+        System.out.println("Каждый должен заплатить по " + formatPrice(totalPerPerson) + " " + rouble + ".");
     }
 
-    private void roubleFormat(double amount) {
+    private String formatRoubles(double amount) {
         if (amount % 10 == 1 && amount % 100 != 11) {
-            rouble = "рубль";
+            return "рубль";
         } else if ((amount % 10 == 2 || amount % 10 == 3 || amount % 10 == 4) && !(amount % 100 >= 11 && amount % 100 <= 14)) {
-            rouble = "рубля";
+            return "рубля";
         } else {
-            rouble = "рублей";
+            return "рублей";
         }
+    }
+
+    private String formatPrice(double price) {
+        return String.format("%.2f", price);
+    }
+}
+
+class Product {
+    private String name;
+    private double price;
+
+    public Product(String name, double price) {
+        this.name = name;
+        this.price = price;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getPrice() {
+        return price;
     }
 }
