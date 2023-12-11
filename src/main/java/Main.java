@@ -4,7 +4,7 @@ public class Main {
     private double totalSum;
     private Scanner scanner;
     private int numberOfPeople;
-    private double calculate; // This variable seems unnecessary as it just stores 'totalSum / numberOfPeople'
+    private double calculate;
     private String rouble;
 
     public static void main(String[] args) {
@@ -15,12 +15,12 @@ public class Main {
     public void run() {
         scanner = new Scanner(System.in);
         totalSum = 0.0;
-        checkNumberOfPeople(); // Ensure this is executed before calling 'calculatePerPerson'
+        checkNumberOfPeople();
         addProduct();
         double totalPerPerson = calculatePerPerson(numberOfPeople);
-        roubleFormat(totalPerPerson); // Call 'roubleFormat' to set the correct form of 'rouble'
+        roubleFormat(totalPerPerson);
         printTotalPerPerson(totalPerPerson);
-        scanner.close(); // закрытие сканера
+        scanner.close();
     }
 
     private void addProduct() {
@@ -37,7 +37,7 @@ public class Main {
             }
 
             double price = scanner.nextDouble();
-            scanner.nextLine(); // Consume the newline left by nextDouble
+            scanner.nextLine();
 
             totalSum += price;
             System.out.println("Товар \"" + product + "\" стоимостью " + price + " руб. добавлен. Хотите добавить ещё товар? (да/нет)");
@@ -51,7 +51,7 @@ public class Main {
 
 
     private boolean checkNumberOfPeople() {
-        System.out.print("На сколько человек разделить счёт? ");
+        System.out.print("На сколько человек нужно разделить счёт? ");
         while (!scanner.hasNextInt() || (numberOfPeople = scanner.nextInt()) <= 1) {
             scanner.nextLine(); // очистка буфера
             System.out.println("Количество человек должно быть больше одного.");
@@ -63,7 +63,7 @@ public class Main {
     private double calculatePerPerson(int numberOfPeople) {
         return totalSum / numberOfPeople;
     }
-git
+
     private void printTotalPerPerson(double totalPerPerson) {
         System.out.println("Каждый должен заплатить по " + totalPerPerson + " " + rouble + ".");
     }
