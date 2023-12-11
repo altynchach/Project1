@@ -35,13 +35,13 @@ public class Main {
             System.out.print("Введите стоимость товара: ");
             while (!scanner.hasNextDouble()) {
                 System.out.println("Введите числовое значение для стоимости.");
-                scanner.nextLine(); // очищаем буфер сканера
+                scanner.nextLine();
             }
             double price = scanner.nextDouble();
-            scanner.nextLine(); // очищаем буфер сканера после чтения числа
+            scanner.nextLine();
 
             totalSum += price;
-            productsList += product + ", "; // Добавление названия товара в список
+            productsList += product + ", ";
             System.out.println("Товар \"" + product + "\" стоимостью " + price + " руб. добавлен.");
 
             System.out.print("Хотите добавить ещё товар? (да/нет) ");
