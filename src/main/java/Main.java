@@ -95,7 +95,7 @@ class BillCalculator {
     }
 
     private void printTotalPerPerson(double totalPerPerson, String rouble) {
-        System.out.println("Каждый должен заплатить по " + formatPrice(totalPerPerson) + " " + rouble + ".");
+        System.out.println("Каждый должен заплатить " + formatPrice(totalPerPerson) + " " + rouble + ".");
     }
 
     private String formatRoubles(double amount) {
